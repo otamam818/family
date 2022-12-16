@@ -8,7 +8,7 @@ A website I am making for my family to use to store their personal files whereve
 ## Roadmap
 ### V0.1
 Make the full-stack
-- [ ] Make the database schema
+- [X] Make the database schema
 - [ ] Back-end
   - [ ] Make the login function
   - [ ] Make the data storage functions from `post` requests
