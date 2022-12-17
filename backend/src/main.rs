@@ -1,24 +1,31 @@
-use axum::{
-    routing::{get, post},
-    http::StatusCode,
-    response::IntoResponse,
-    Json, Router, extract::Path};
-use serde_json::json;
+/// Acts as the main server that interacts with the front-end to serve
+/// whatever my family needs
 
+// Crate imports
+use axum::{routing::{get, post}, Router};
 use std::net::SocketAddr;
 
+// Modules used
 mod user_info;
+mod user_funcs;
+mod page_funcs;
 
-use crate::user_info::{CreateUser, User};
+// Internal imports
+use crate::user_funcs::create_user;
+use crate::page_funcs::root;
 
+/// Runs the program:
+/// - Sets up a router and binds it to functions that implement specific
+///   solutions
+/// - Sets up a socket to listen to the client-side requests
 #[tokio::main]
 async fn main() {
 
     tracing_subscriber::fmt::init();
+    // Map routes to their respective function
     let app = Router::new()
         .route("/", get(root))
-        .route("/user", post(create_user))
-        .route("/:name", get(json_hello));
+        .route("/user", post(create_user));
 
     let addr = SocketAddr::from(([192, 168, 1, 147], 8000));
     tracing::info!("listening on {}", addr);
@@ -26,25 +33,5 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
-}
-
-async fn root() -> &'static str {
-    "Hello, There!"
-}
-
-async fn json_hello(Path(name): Path<String>) -> impl IntoResponse {
-    let greeting = name.as_str();
-    let hello = String::from("Hello ");
-
-    (StatusCode::OK, Json(json!({"message": hello + greeting })))
-}
-
-async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse {
-    let user = User {
-        id: 1337,
-        username: payload.username
-    };
-
-    (StatusCode::CREATED, Json(user))
 }
 
