@@ -1,25 +1,15 @@
 use axum::{
-    routing::{get, post, get_service},
+    routing::{get, post},
     http::StatusCode,
     response::IntoResponse,
     Json, Router, extract::Path};
 use serde_json::json;
-use tokio::io;
-use tower_http::services::ServeFile;
 
 use std::net::SocketAddr;
-use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize,Deserialize, Clone, Eq, Hash, PartialEq)]
-struct User {
-    id: u64,
-    username: String,
-}
+mod user_info;
 
-#[derive(Deserialize)]
-struct CreateUser {
-    username: String,
-}
+use crate::user_info::{CreateUser, User};
 
 #[tokio::main]
 async fn main() {
