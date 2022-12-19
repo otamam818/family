@@ -9,6 +9,7 @@ use std::net::SocketAddr;
 mod user_info;
 mod user_funcs;
 mod page_funcs;
+mod date;
 
 // Internal imports
 use crate::user_funcs::create_user;
