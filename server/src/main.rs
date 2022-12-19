@@ -3,6 +3,7 @@
 
 // Crate imports
 use axum::{routing::{get, post}, Router};
+use tower_http::cors::CorsLayer;
 use std::net::SocketAddr;
 
 // Modules used
@@ -26,9 +27,10 @@ async fn main() {
     // Map routes to their respective function
     let app = Router::new()
         .route("/", get(root))
-        .route("/user", post(create_user));
+        .route("/user", post(create_user))
+        .layer(CorsLayer::permissive());
 
-    let addr = SocketAddr::from(([192, 168, 1, 147], 8000));
+    let addr = SocketAddr::from(([127, 0, 0, 1], 8000));
     tracing::info!("listening on {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
