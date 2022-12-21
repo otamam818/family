@@ -1,0 +1,34 @@
+:root {
+  --color--bd-red--700: #B80022;
+  --color--bd-red--500: #FF1F48;
+  --color--bd-green--700: #1C3626;
+  --color--bd-green--500: #3E7955;
+}
+
+.splash {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+
+  .circle {
+    position: absolute;
+    height: 30vh;
+    width: 30vh;
+    border-radius: 50%;
+  }
+
+  .left {
+    background-color: var(--color--bd-red--700);
+    background: linear-gradient(90deg, var(--color--bd-red--500), var(--color--bd-red--700));
+  }
+
+  .right {
+    background-color: var(--color--bd-green--700);
+    background: linear-gradient(90deg, var(--color--bd-green--700), var(--color--bd-green--500));
+    top: 70vh;
+    left: calc(100vw - 30vh);
+  }
+}
+
