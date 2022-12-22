@@ -1,0 +1,111 @@
+.login-page form {
+  background-color: #00000091;
+  border-radius: 15px;
+  padding: 30px 35px;
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  animation: squeeze-in 800ms 1s forwards;
+
+  h2, h3 {
+    margin: 2px;
+  }
+
+  label {
+    text-align: left;
+    font-weight: bold;
+  }
+
+  input {
+    margin-bottom: 15px;
+    border: none;
+    outline: none;
+    padding: 8px 5px;
+    border-radius: 5px;
+    box-shadow: 0 3px 4px #00000073;
+    background-color: #000000ad;
+  }
+
+  span {
+    color: #888;
+
+    &:hover {
+      color: #aaa;
+      cursor: pointer;
+    }
+  }
+
+  button {
+    background-color: #1a1a1aad;
+  }
+}
+
+.login-page .fade-out {
+  animation: squeeze-out 400ms forwards;
+}
+
+@keyframes squeeze-in {
+  0% {
+    opacity: 0;
+    transform: scaleX(2);
+    filter: blur(15px);
+  }
+
+  45% {
+    transform: scaleX(0.8);
+  }
+
+  100% {
+    transform: scaleX(1);
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes squeeze-out {
+  0% {
+    transform: scaleX(1);
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  35% {
+    transform: scaleX(0.8);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(2);
+    filter: blur(15px);
+    display: none;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    scale: 1;
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  25% {
+    scale: 0.7;
+    filter: blur(20px);
+  }
+
+  50% {
+    scale: 1.5;
+    filter: blur(0px);
+  }
+}
+
+.login-page .bounce {
+  animation: bounce 800ms forwards;
+}
+
+.login-page .no-animation {
+  animation: none;
+  opacity: 1;
+}
+
