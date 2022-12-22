@@ -3,6 +3,7 @@
   --color--bd-red--500: #FF1F48;
   --color--bd-green--700: #1C3626;
   --color--bd-green--500: #3E7955;
+  --color--bd-green--1200: #0E1B13;
 }
 
 .splash {
@@ -11,6 +12,13 @@
   width: 100vw;
   top: 0;
   left: 0;
+  z-index: -1;
+
+  h1 {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 4px 8px #0000006e;
+  }
 
   .circle {
     position: absolute;
@@ -22,13 +30,44 @@
   .left {
     background-color: var(--color--bd-red--700);
     background: linear-gradient(90deg, var(--color--bd-red--500), var(--color--bd-red--700));
+    top: 0vh;
+    left: calc(100vw - 50vh);
+    animation: left-move 5s 500ms infinite;
   }
 
   .right {
     background-color: var(--color--bd-green--700);
     background: linear-gradient(90deg, var(--color--bd-green--700), var(--color--bd-green--500));
+    transition: 400ms;
+    animation: right-move 5s infinite;
+  }
+}
+
+@keyframes left-move {
+  0%, 100% {
+    top: 0vh;
+    left: calc(100vw - 50vh);
+    box-shadow: -10px 10px 20px #121212;
+  }
+
+  50% {
+    top: 50vh;
+    left: calc(50vw);
+    box-shadow: 20px -20px 31px #121212;
+  }
+}
+
+@keyframes right-move {
+  0%, 100% {
+    top: 50vh;
+    left: calc(100vw - 50vh);
+    box-shadow: 15px 15px 31px hsla(143deg, 32%, 4%, 0.8);
+  }
+
+  50% {
     top: 70vh;
     left: calc(100vw - 30vh);
+    box-shadow: -15px -15px 20px hsla(143deg, 32%, 6%, 0.5);
   }
 }
 

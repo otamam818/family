@@ -1,12 +1,12 @@
 <script>
   import { Router, Route } from "svelte-navigator";
-  import Login from "./Login/Login.svelte";
+  import LoginPage from "./Login/LoginPage.svelte";
 </script>
 
 <main>
   <Router>
     <Route path="/">
-      <Login />
+      <LoginPage />
     </Route>
     <Route path="login">
       <div> Mario </div>
