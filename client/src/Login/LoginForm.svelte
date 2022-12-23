@@ -3,14 +3,14 @@
   import { onMount } from 'svelte';
   import {formClass} from "./formHandler";
   import Form from "./Form.svelte";
+  export let updateComponenent;
+
 	let usernameInput
   onMount(() => {
     setTimeout(() => {
       usernameInput.focus()
     }, 1200);
   })
-
-  export let updateComponenent;
 
   onMount(() => {
     setTimeout(() => {
@@ -28,11 +28,11 @@
   <span
     on:keydown={(e) => console.log(e)}
     on:click={() => {
-      formClass.update(() => "bounce");
+      formClass.update(() => "fade-out");
       setTimeout(() => {
         updateComponenent("NewUser");
-        formClass.update(() => "no-animation");
-      }, 1200);
+        formClass.update(() => "spread squeeze-in");
+      }, 400);
   }}> Make a new user </span>
 
   <button> Submit </button>

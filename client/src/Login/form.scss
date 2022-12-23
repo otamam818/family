@@ -1,48 +1,96 @@
-.login-page form {
-  background-color: #00000091;
-  border-radius: 15px;
-  padding: 30px 35px;
-  backdrop-filter: blur(20px);
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  animation: squeeze-in 800ms 1s forwards;
+.login-page {
+  form {
+    background-color: #00000091;
+    border-radius: 15px;
+    padding: 30px 35px;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    animation: squeeze-in 800ms 1s forwards;
 
-  h2, h3 {
-    margin: 2px;
-  }
+    h2, h3 {
+      margin: 2px;
+    }
 
-  label {
-    text-align: left;
-    font-weight: bold;
-  }
+    label {
+      text-align: left;
+      font-weight: bold;
+    }
 
-  input {
-    margin-bottom: 15px;
-    border: none;
-    outline: none;
-    padding: 8px 5px;
-    border-radius: 5px;
-    box-shadow: 0 3px 4px #00000073;
-    background-color: #000000ad;
-  }
+    input {
+      margin-bottom: 15px;
+      border: none;
+      outline: none;
+      padding: 8px 5px;
+      border-radius: 5px;
+      box-shadow: 0 3px 4px #00000073;
+      background-color: #000000ad;
+    }
 
-  span {
-    color: #888;
+    span {
+      color: #888;
 
-    &:hover {
-      color: #aaa;
-      cursor: pointer;
+      &:hover {
+        color: #aaa;
+        cursor: pointer;
+      }
+    }
+
+    button {
+      background-color: #1a1a1aad;
     }
   }
 
-  button {
-    background-color: #1a1a1aad;
+  // Animation sequences
+  .fade-out {
+    animation: squeeze-out 400ms forwards;
   }
-}
 
-.login-page .fade-out {
-  animation: squeeze-out 400ms forwards;
+  .squeeze-in {
+    animation: squeeze-in 600ms forwards;
+  }
+
+  .bounce {
+    animation: bounce 800ms forwards;
+  }
+
+  .no-animation {
+    animation: none;
+    opacity: 1;
+  }
+
+  .spread {
+    flex-direction: row;
+    justify-content: space-around;
+
+    & > div {
+      margin: 0 10px;
+    }
+
+    select {
+      background: #242323ab;
+      color: white;
+      border: none;
+      padding: 5px 4px;
+      border-radius: 6px;
+      margin-left: 5px;
+      box-shadow: -2px -3px 4px transparent;
+      transition: 200ms;
+
+      &:hover {
+        background-color: var(--color--bd-green--1200);
+        box-shadow: 0px 3px 4px black;
+        cursor: pointer;
+      }
+    }
+
+    .back-message {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+    }
+  }
 }
 
 @keyframes squeeze-in {
@@ -98,14 +146,5 @@
     scale: 1.5;
     filter: blur(0px);
   }
-}
-
-.login-page .bounce {
-  animation: bounce 800ms forwards;
-}
-
-.login-page .no-animation {
-  animation: none;
-  opacity: 1;
 }
 
