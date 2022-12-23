@@ -11,10 +11,10 @@ use crate::date::Date;
 pub struct User {
     pub username: String,
     pub first_name: String,
-    pub last_name: String,
-    pub birthday: Date,
-    pub gender: Gender,
-    pub place_of_birth: String,
+    pub last_name: Option<String>,
+    pub birthday: Option<Date>,
+    pub gender: Option<Gender>,
+    pub place_of_birth: Option<String>,
 }
 
 /// Represents a gender of the family
@@ -38,5 +38,34 @@ pub struct CreateUser {
     pub username: String,
     pub password: String,
     pub secret_code: String,
+    pub first_name: String,
+    pub last_name: Option<String>,
+    pub birthday: Option<Date>,
+    pub gender: Gender,
+    pub place_of_birth: Option<String>,
+}
+
+impl CreateUser {
+    pub fn new(
+        username: String,
+        password: String,
+        secret_code: String,
+        first_name: String,
+        last_name: Option<String>,
+        birthday: Option<Date>,
+        gender: Gender,
+        place_of_birth: Option<String>,
+    ) -> CreateUser {
+        CreateUser {
+            username,
+            password,
+            secret_code,
+            first_name,
+            last_name,
+            birthday,
+            gender,
+            place_of_birth,
+        }
+    }
 }
 

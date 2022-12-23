@@ -33,18 +33,15 @@ impl Date {
         Ok(candidate)
     }
 
-    #[allow(dead_code)]
     pub fn year(&self) -> u32 {
         self.2
     }
 
 
-    #[allow(dead_code)]
     pub fn month(&self) -> u8 {
         self.1
     }
 
-    #[allow(dead_code)]
     pub fn day(&self) -> u8 {
         self.0
     }
@@ -64,12 +61,22 @@ impl Date {
 
         true
     }
+
+    #[allow(dead_code)]
+    fn as_filename(&self) -> String {
+        let (year, month, day) = (
+            self.year(),
+            if self.month() < 10 {format!("0{}", self.month())} else {self.month().to_string()},
+            if self.day() < 10 {format!("0{}", self.day())} else {self.day().to_string()},
+        );
+        format!("{}-{}-{}", year, month, day)
+    }
 }
 
 
 impl Display for Date {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}/{}/{}", self.0, self.1, self.2)
+        write!(f, "{}/{}/{}", self.day(), self.month(), self.year())
     }
 }
 
