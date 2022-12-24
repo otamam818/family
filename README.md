@@ -1,4 +1,4 @@
-**Note:** Not started yet
+**Note:** In progress - has not reached version 0.1 yet
 
 # My Family website
 A website I am making for my family to use to store their personal files wherever they go. Like a Google-Drive alternative, but with personalized features:
@@ -14,9 +14,9 @@ Make the full-stack
   - [ ] Make the data storage functions from `post` requests
   - [ ] Make the file serving functions from `get` requests
 - [ ] Front-end
-  - [ ] Make the Login page
-  - [ ] Make the add-new user page
-  - [ ] Authenticate the Login page with the backend to login
+  - [X] Make the Login page
+  - [X] Make the add-new user page
+  - [X] Authenticate the Login page with the backend to login
   - [ ] Make a Home page
   - [ ] Authenticate the home page to get requests for the specific user
 
