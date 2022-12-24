@@ -1,7 +1,7 @@
 /// The file that controls all the functions defined by the user
 use std::fs;
-use axum::{response::IntoResponse, Json, http::StatusCode};
-use crate::{user_info::CreateUser, date::Date};
+use axum::{response::IntoResponse, Json, http::StatusCode, extract::State};
+use crate::{user_info::{CreateUser, User, UserAuth}, date::Date, app_data::AppData};
 
 /// Creates a new user from the UserAuth data
 pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse {
@@ -27,10 +27,9 @@ pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse 
     let place_of_birth = make_option(&payload.place_of_birth);
     let birthday = make_date_option(&payload.birthday);
 
-    let user = CreateUser::new(
+    let user = User::new(
         payload.username,
         payload.password,
-        payload.secret_code,
         payload.first_name,
         last_name,
         birthday,
@@ -50,7 +49,7 @@ pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse 
     }
 }
 
-fn make_user_file(user: &CreateUser) -> std::io::Result<()> {
+fn make_user_file(user: &User) -> std::io::Result<()> {
     let data = serde_json::to_string(&user);
     let file_path = format!("data/users/{}.json", user.username);
     fs::write(file_path, data.unwrap())?;
@@ -78,5 +77,18 @@ fn make_date_option(date_option: &Option<Date>) -> Option<Date> {
     } else {
         Some(curr_date)
     }
+}
+
+#[allow(dead_code, unused)]
+/// Creates a new user from the UserAuth data
+pub async fn login_user(
+    State(state): State<AppData>,
+    Json(payload): Json<UserAuth>,
+) -> impl IntoResponse {
+    dbg!(&state);
+    if state.user_exists(&payload.username) {
+        return (StatusCode::OK, Ok(Json(payload)));
+    }
+    (StatusCode::NOT_FOUND, Err(format!("Not found: {}", payload.username)))
 }
 

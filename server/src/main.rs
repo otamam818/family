@@ -7,14 +7,16 @@ use tower_http::cors::CorsLayer;
 use std::net::SocketAddr;
 
 // Modules used
+mod app_data;
 mod user_info;
 mod user_funcs;
 mod page_funcs;
 mod date;
 
 // Internal imports
-use crate::user_funcs::create_user;
+use crate::user_funcs::{create_user, login_user};
 use crate::page_funcs::root;
+use crate::app_data::AppData;
 
 /// Runs the program:
 /// - Sets up a router and binds it to functions that implement specific
@@ -24,10 +26,13 @@ use crate::page_funcs::root;
 async fn main() {
 
     tracing_subscriber::fmt::init();
+    let app_state = AppData::load();
     // Map routes to their respective function
     let app = Router::new()
         .route("/", get(root))
         .route("/user", post(create_user))
+        .route("/login", post(login_user))
+        .with_state(app_state)
         .layer(CorsLayer::permissive());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 8000));

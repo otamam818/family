@@ -10,11 +10,34 @@ use crate::date::Date;
 #[derive(Debug, Serialize,Deserialize, Clone, Eq, Hash, PartialEq)]
 pub struct User {
     pub username: String,
+    pub password: String,
     pub first_name: String,
     pub last_name: Option<String>,
     pub birthday: Option<Date>,
-    pub gender: Option<Gender>,
+    pub gender: Gender,
     pub place_of_birth: Option<String>,
+}
+
+impl User {
+    pub fn new(
+        username: String,
+        password: String,
+        first_name: String,
+        last_name: Option<String>,
+        birthday: Option<Date>,
+        gender: Gender,
+        place_of_birth: Option<String>,
+    ) -> User {
+        User {
+            username,
+            password,
+            first_name,
+            last_name,
+            birthday,
+            gender,
+            place_of_birth,
+        }
+    }
 }
 
 /// Represents a gender of the family
@@ -45,27 +68,4 @@ pub struct CreateUser {
     pub place_of_birth: Option<String>,
 }
 
-impl CreateUser {
-    pub fn new(
-        username: String,
-        password: String,
-        secret_code: String,
-        first_name: String,
-        last_name: Option<String>,
-        birthday: Option<Date>,
-        gender: Gender,
-        place_of_birth: Option<String>,
-    ) -> CreateUser {
-        CreateUser {
-            username,
-            password,
-            secret_code,
-            first_name,
-            last_name,
-            birthday,
-            gender,
-            place_of_birth,
-        }
-    }
-}
 
