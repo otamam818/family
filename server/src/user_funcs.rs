@@ -3,7 +3,7 @@ use std::fs;
 use axum::{response::IntoResponse, Json, http::StatusCode, extract::State};
 use crate::{user_info::{CreateUser, User, UserAuth}, date::Date, app_data::AppData};
 
-/// Creates a new user from the UserAuth data
+/// Creates a new user from the CreateUser data
 pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse {
     // The assumption is that this is run from the "server" folder
     let secret_code = fs::read_to_string("data/secret_code.txt")
@@ -85,10 +85,9 @@ pub async fn login_user(
     State(state): State<AppData>,
     Json(payload): Json<UserAuth>,
 ) -> impl IntoResponse {
-    dbg!(&state);
-    if state.user_exists(&payload.username) {
+    if state.autheticate(&payload) {
         return (StatusCode::OK, Ok(Json(payload)));
     }
-    (StatusCode::NOT_FOUND, Err(format!("Not found: {}", payload.username)))
+    (StatusCode::NOT_FOUND, Err("Inavlid credentials"))
 }
 
