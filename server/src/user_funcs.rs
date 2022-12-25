@@ -1,7 +1,10 @@
 /// The file that controls all the functions defined by the user
 use std::fs;
 use axum::{response::IntoResponse, Json, http::StatusCode, extract::State};
-use crate::{user_info::{CreateUser, User, UserAuth}, date::Date, app_data::AppData};
+use crate::{
+    user_info::{CreateUser, User, UserAuth},
+    date::Date, app_data::AppData
+};
 
 /// Creates a new user from the CreateUser data
 pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse {
@@ -38,10 +41,10 @@ pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse 
     );
 
     match make_user_file(&user) {
-        Ok(_) => (
-            StatusCode::CREATED,
-            Ok(Json(user))
-        ),
+        Ok(_) => {
+            // TODO: Add the user to the `AppState.users` HashMap
+            (StatusCode::CREATED, Ok(Json(user)))
+        },
         Err(message) => (
             StatusCode::BAD_REQUEST,
             Err(format!("Invalid input: {:?}", message))
@@ -49,24 +52,28 @@ pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse 
     }
 }
 
+/// Adds a user to the data/users folder as a separate JSON file
 fn make_user_file(user: &User) -> std::io::Result<()> {
     let data = serde_json::to_string(&user);
     let file_path = format!("data/users/{}.json", user.username);
-    fs::write(file_path, data.unwrap())?;
+    fs::write(file_path, data?)?;
     Ok(())
 }
 
+/// Transforms empty strings into None-type Options
 fn make_option(payload_field: &Option<String>) -> Option<String> {
-    if &payload_field.clone().unwrap().len() == &0 {
+    if &payload_field.clone()?.len() == &0 {
         None
     } else {
-        let opt = &payload_field.clone().unwrap();
+        let opt = &payload_field.clone()?;
         Some(String::from(opt))
     }
 }
 
+/// Transforms the 0/00/0000 dates into None-type Options
 fn make_date_option(date_option: &Option<Date>) -> Option<Date> {
-    let curr_date = date_option.clone().unwrap();
+    let curr_date = date_option.clone()
+        .expect("Enforced to be valid data from front-end");
     let is_empty =
         curr_date.year() == 0
         && curr_date.month() == 0

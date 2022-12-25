@@ -1,6 +1,8 @@
-use std::{collections::HashMap, fs};
-use std::hash::{Hash, Hasher};
-use std::io::Result;
+use std::{
+    collections::HashMap,
+    hash::{Hash, Hasher}, io::Result,
+    fs,
+};
 
 use serde::{Deserialize, Serialize};
 use crate::user_info::{User, UserAuth};
@@ -25,6 +27,8 @@ impl Hash for AppData {
 const USER_DIR: &'static str = "./data/users";
 
 impl AppData {
+    /// Loads the previously-recorded data, stored in the local system of the
+    /// server
     pub fn load() -> AppData {
         let mut users: HashMap<String, User> = HashMap::new();
         // Get a list of files in data/users/
@@ -35,7 +39,7 @@ impl AppData {
 
         // Load each of the files as a User to add to the final map
         for path in user_filepaths {
-            let contents = fs::read_to_string(path).unwrap();
+            let contents = fs::read_to_string(path).expect("Found in system");
             let user: User = serde_json::from_str(&contents).expect(ENF_FE);
             users.insert(user.username.clone(), user);
         }
@@ -59,7 +63,8 @@ impl AppData {
     }
 
     fn password_matches(&self, user_auth: &UserAuth) -> bool {
-        self.users.get(&user_auth.username).unwrap()
+        self.users.get(&user_auth.username)
+            .expect("At this point the user has already been found")
             .password
             .eq(&user_auth.password)
     }
