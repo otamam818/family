@@ -37,6 +37,10 @@
   }}> Make a new user </span>
 
   <button on:click|preventDefault={() => {
-    handleSubmit();
+    handleSubmit()
+      .then(token => {
+        console.log(token);
+        document.cookie = `ahmed-fam-access=${token}`;
+    });
   }}> Submit </button>
 </Form>
