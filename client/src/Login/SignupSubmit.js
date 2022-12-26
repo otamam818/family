@@ -14,9 +14,10 @@ export function handleSubmit() {
   });
 
   let birthday = getDate(elements[4].split('-'));
-  if (!birthday.every(val => typeof(val) === 'string')) {
+  if (!birthday.every(val => typeof(val) === 'number')) {
     birthday = [0, 0, 0];
   }
+
   let gender = document.querySelector("select").value.toUpperCase();
   let first_name = elements[2];
   let last_name = elements[3];
@@ -42,6 +43,8 @@ export function handleSubmit() {
   })
     .then((value) => {
       if (value.ok) {
+        /* TODO: Implement re-routing so that the new user is logged in after
+                 signing up */
         return value.json();
       }
       return value.text();
