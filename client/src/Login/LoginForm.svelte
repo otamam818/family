@@ -2,6 +2,7 @@
   import "./form.scss";
   import { onMount } from 'svelte';
   import {formClass} from "./formHandler";
+  import {handleSubmit} from "./LoginSubmit.js";
   import Form from "./Form.svelte";
   export let updateComponenent;
 
@@ -24,7 +25,7 @@
   <label for="username"> Username </label>
   <input id="username" type="text" bind:this={usernameInput}>
   <label for="password"> Password </label>
-  <input type="password">
+  <input id="password" type="password">
   <span
     on:keydown={(e) => console.log(e)}
     on:click={() => {
@@ -35,5 +36,7 @@
       }, 400);
   }}> Make a new user </span>
 
-  <button> Submit </button>
+  <button on:click|preventDefault={() => {
+    handleSubmit();
+  }}> Submit </button>
 </Form>
