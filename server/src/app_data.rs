@@ -1,20 +1,30 @@
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     hash::{Hash, Hasher}, io::Result,
     fs,
 };
 
 use serde::{Deserialize, Serialize};
-use crate::user_info::{User, UserAuth};
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use crate::user_info::{User, UserAuth, UserSession};
 
-// Enforce front-end
+// Constants
 const ENF_FE: &'static str
     = "Well-formed contents should be enforced from the front-end";
+const USR_FOUND: &'static str
+    = "At this point the user has already been found";
+
+// Custom types
+type Token = String;
 
 /// Stores the state of different pre-loaded data
 #[derive(Debug, Serialize,Deserialize, Clone, Eq, PartialEq)]
 pub struct AppData {
-    users: HashMap<String, User>
+    /// Stores all registered users
+    users: HashMap<String, User>,
+
+    /// Stores tokens of logged in users
+    logged_in: HashMap<Token, UserSession>,
 }
 
 impl Hash for AppData {
@@ -45,7 +55,8 @@ impl AppData {
         }
 
         AppData {
-            users
+            users,
+            logged_in: HashMap::new()
         }
     }
 
@@ -64,9 +75,31 @@ impl AppData {
 
     fn password_matches(&self, user_auth: &UserAuth) -> bool {
         self.users.get(&user_auth.username)
-            .expect("At this point the user has already been found")
+            .expect(USR_FOUND)
             .password
             .eq(&user_auth.password)
+    }
+
+    pub fn generate_token(&mut self, user_auth: &UserAuth,) -> String {
+        let token = encode(
+            &Header::default(),
+            &user_auth,
+            // TODO: replace `abcd` with an actual secret_code that
+            // generates at a random time
+            &EncodingKey::from_secret("abcd".as_bytes())
+        ).unwrap();
+
+        self.logged_in
+            .entry(token.clone())
+            .or_insert(UserSession::new(
+                token.clone(),
+                self.users
+                .get(&user_auth.username)
+                .expect(USR_FOUND)
+                .clone()
+            ));
+        dbg!(&self);
+        token
     }
 }
 

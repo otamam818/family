@@ -1,15 +1,19 @@
 /// The file that controls all the functions defined by the user
 use std::fs;
 use axum::{response::IntoResponse, Json, http::StatusCode, extract::State};
+
 use crate::{
     user_info::{CreateUser, User, UserAuth},
     date::Date, app_data::AppData
 };
 
+
 /// Creates a new user from the CreateUser data
 pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse {
+    const PATH_SECRET_FILE: &'static str = "data/secret_code.txt";
+
     // The assumption is that this is run from the "server" folder
-    let secret_code = fs::read_to_string("data/secret_code.txt")
+    let secret_code = fs::read_to_string(PATH_SECRET_FILE)
         .expect("File should exist within backend, no matter what");
 
     // Remove the EOF character from the file
@@ -86,14 +90,13 @@ fn make_date_option(date_option: &Option<Date>) -> Option<Date> {
     }
 }
 
-#[allow(dead_code, unused)]
 /// Creates a new user from the UserAuth data
 pub async fn login_user(
-    State(state): State<AppData>,
-    Json(payload): Json<UserAuth>,
+    State(mut state): State<AppData>,
+    Json(user_auth): Json<UserAuth>,
 ) -> impl IntoResponse {
-    if state.autheticate(&payload) {
-        return (StatusCode::OK, Ok(Json(payload)));
+    if state.autheticate(&user_auth) {
+        return (StatusCode::OK, Ok(state.generate_token(&user_auth)));
     }
     (StatusCode::NOT_FOUND, Err("Inavlid credentials"))
 }

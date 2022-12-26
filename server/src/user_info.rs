@@ -1,3 +1,5 @@
+use std::time::SystemTime;
+
 use serde::{Deserialize, Serialize};
 use crate::date::Date;
 
@@ -68,4 +70,21 @@ pub struct CreateUser {
     pub place_of_birth: Option<String>,
 }
 
+// TODO: Migrate to separate folder
+#[derive(Debug, Serialize,Deserialize, Clone, Eq, Hash, PartialEq)]
+pub struct UserSession {
+    pub token: String,
+    pub user: User,
+    pub time: SystemTime,
+}
+
+impl UserSession {
+    pub fn new(token: String, user: User) -> Self {
+        Self {
+            token,
+            user,
+            time: SystemTime::now()
+        }
+    }
+}
 
