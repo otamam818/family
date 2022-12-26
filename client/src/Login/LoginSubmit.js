@@ -8,9 +8,7 @@ export function handleSubmit() {
     return document.querySelector(`input[id='${value}']`).value;
   });
 
-  console.log(username, password);
-
-  fetch(new Request("http://localhost:8000/login"), {
+  return fetch(new Request("http://localhost:8000/login"), {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -23,14 +21,10 @@ export function handleSubmit() {
     mode: 'cors'
   })
     .then((value) => {
-      console.log(value);
-      if (value.ok) {
-        return value.json();
-      }
       return value.text();
     })
     .then((value) => {
-      console.log(value);
+      return value;
     })
     .catch((reason) => {
       console.error(reason);
