@@ -1,3 +1,5 @@
+import {postPromise} from "../dataHandler/requestHandler";
+
 export function handleSubmit() {
   const fields = [
     'username',
@@ -10,7 +12,9 @@ export function handleSubmit() {
   ];
 
   let elements = fields.map((value) => {
-    return document.querySelector(`input[id='${value}']`).value;
+    
+    let inpAccept = document.querySelector(`input[id='${value}']`);
+    return inpAccept.value;
   });
 
   let birthday = getDate(elements[4].split('-'));
@@ -21,42 +25,37 @@ export function handleSubmit() {
   let gender = document.querySelector("select").value.toUpperCase();
   let first_name = elements[2];
   let last_name = elements[3];
-  console.log(elements, birthday, gender);
 
-  fetch(new Request("http://localhost:8000/user"), {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      username: elements[0],
-      password: elements[1],
-      secret_code: elements[6],
-      first_name,
-      last_name,
-      birthday,
-      gender,
-      place_of_birth: elements[5],
-    }),
-    mode: 'cors'
+  postPromise("user", {
+    username: elements[0],
+    password: elements[1],
+    secret_code: elements[6],
+    first_name,
+    last_name,
+    birthday,
+    gender,
+    place_of_birth: elements[5],
   })
     .then((value) => {
-      if (value.ok) {
-        /* TODO: Implement re-routing so that the new user is logged in after
-                 signing up */
-        return value.json();
-      }
-      return value.text();
+     if (value.ok) {
+       /* TODO: Implement re-routing so that the new user is logged in after
+                signing up */
+       return value.json();
+     }
+     return value.text();
     })
     .then((value) => {
-      console.log(value);
+      console.log(`Submitted: \n${value}`);
     })
     .catch((reason) => {
       console.error(reason);
     });
 }
 
+/**
+ * Constructs a promise from a POST request
+ * @param originalDate {Array<string>}
+ */
 function getDate(originalDate) {
   let temp = originalDate[2];
   originalDate[2] = originalDate[0];

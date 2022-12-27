@@ -2,11 +2,15 @@
   import LoginForm from "./LoginForm.svelte";
   import SignupForm from "./SignupForm.svelte";
   import Splash from "./Splash.svelte";
+  import {valid_session} from "../dataHandler/requestHandler";
 
   let currComponent = "Form"
+  /** @param value {string} */
   function updateComponenent (value) {
     currComponent = value;
   };
+
+  valid_session();
 </script>
 
 <div class="login-page">

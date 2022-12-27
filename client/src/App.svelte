@@ -1,5 +1,6 @@
 <script>
   import { Router, Route } from "svelte-navigator";
+    import DashboardPage from "./Dashboard/DashboardPage.svelte";
   import LoginPage from "./Login/LoginPage.svelte";
 </script>
 
@@ -8,11 +9,9 @@
     <Route path="/">
       <LoginPage />
     </Route>
-    <Route path="login">
-      <div> Mario </div>
+    <Route path="dashboard">
+      <DashboardPage />
     </Route>
   </Router>
 </main>
 
-<style>
-</style>

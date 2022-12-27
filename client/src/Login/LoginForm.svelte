@@ -4,6 +4,7 @@
   import {formClass} from "./formHandler";
   import {handleSubmit} from "./LoginSubmit.js";
   import Form from "./Form.svelte";
+    import {ACCESS_KEY} from "../dataHandler/cookieHandler";
   export let updateComponenent;
 
 	let usernameInput
@@ -40,7 +41,14 @@
     handleSubmit()
       .then(token => {
         console.log(token);
-        document.cookie = `ahmed-fam-access=${token}`;
+        if (token === "Inavlid credentials") {
+          // Unset the key for safety
+          document.cookie = `${ACCESS_KEY}=`;
+          return;
+        }
+        document.cookie = `${ACCESS_KEY}=${token}`;
+        // Go to the dashboard page
+        window.location.href = "/dashboard";
     });
   }}> Submit </button>
 </Form>
