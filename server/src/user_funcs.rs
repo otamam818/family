@@ -1,6 +1,7 @@
 /// The file that controls all the functions defined by the user
-use std::fs;
+use std::{fs, sync::{RwLock, Arc}};
 use axum::{response::IntoResponse, Json, http::StatusCode, extract::State};
+use serde_json::json;
 
 use crate::{
     user_info::{CreateUser, User, UserAuth},
@@ -92,12 +93,21 @@ fn make_date_option(date_option: &Option<Date>) -> Option<Date> {
 
 /// Creates a new user from the UserAuth data
 pub async fn login_user(
-    State(mut state): State<AppData>,
+    State(shared_state): State<Arc<RwLock<AppData>>>,
     Json(user_auth): Json<UserAuth>,
 ) -> impl IntoResponse {
+    let mut state = shared_state.write().unwrap();
     if state.autheticate(&user_auth) {
         return (StatusCode::OK, Ok(state.generate_token(&user_auth)));
     }
     (StatusCode::NOT_FOUND, Err("Inavlid credentials"))
+}
+
+pub async fn check_valid_key(
+    State(shared_state): State<Arc<RwLock<AppData>>>,
+    token: String,
+) -> impl IntoResponse {
+    let state = shared_state.write().unwrap();
+    (StatusCode::OK, Json(json!({"exists" : state.session_exists(token)})))
 }
 

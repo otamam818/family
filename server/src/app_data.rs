@@ -1,12 +1,12 @@
 use std::{
-    collections::{HashMap, HashSet},
+    collections::HashMap,
     hash::{Hash, Hasher}, io::Result,
     fs,
 };
 
 use serde::{Deserialize, Serialize};
-use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
-use crate::user_info::{User, UserAuth, UserSession};
+use jsonwebtoken::{encode, EncodingKey, Header};
+use crate::{user_info::{User, UserAuth}, user_session::UserSession};
 
 // Constants
 const ENF_FE: &'static str
@@ -89,17 +89,25 @@ impl AppData {
             &EncodingKey::from_secret("abcd".as_bytes())
         ).unwrap();
 
+        let new_user_session = UserSession::new(
+            self.users
+            .get(&user_auth.username)
+            .expect(USR_FOUND)
+            .username.clone()
+        );
         self.logged_in
             .entry(token.clone())
-            .or_insert(UserSession::new(
-                token.clone(),
-                self.users
-                .get(&user_auth.username)
-                .expect(USR_FOUND)
-                .clone()
-            ));
-        dbg!(&self);
+            .and_modify(|key| *key = new_user_session.clone())
+            .or_insert(new_user_session);
+
         token
+    }
+
+    pub fn session_exists(&self, token: String) -> bool {
+        match self.logged_in.get(&token) {
+            Some(value) => value.still_valid(),
+            None => false
+        }
     }
 }
 

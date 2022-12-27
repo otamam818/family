@@ -4,17 +4,18 @@
 // Crate imports
 use axum::{routing::{get, post}, Router};
 use tower_http::cors::CorsLayer;
-use std::net::SocketAddr;
+use std::{net::SocketAddr, sync::{Arc, RwLock}};
 
 // Modules used
 mod app_data;
 mod user_info;
 mod user_funcs;
+mod user_session;
 mod page_funcs;
 mod date;
 
 // Internal imports
-use crate::user_funcs::{create_user, login_user};
+use crate::user_funcs::{create_user, login_user, check_valid_key};
 use crate::page_funcs::root;
 use crate::app_data::AppData;
 
@@ -26,13 +27,14 @@ use crate::app_data::AppData;
 async fn main() {
 
     tracing_subscriber::fmt::init();
-    let app_state = AppData::load();
+    let app_state = Arc::new(RwLock::new(AppData::load()));
     // Map routes to their respective function
     let app = Router::new()
         .route("/", get(root))
         .route("/user", post(create_user))
         .route("/login", post(login_user))
-        .with_state(app_state)
+        .route("/session-check", post(check_valid_key))
+        .with_state(Arc::clone(&app_state))
         .layer(CorsLayer::permissive());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 8000));
