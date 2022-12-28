@@ -4,7 +4,7 @@
   import {formClass} from "./formHandler";
   import {handleSubmit} from "./LoginSubmit.js";
   import Form from "./Form.svelte";
-    import {ACCESS_KEY} from "../dataHandler/cookieHandler";
+  import {ACCESS_KEY} from "../dataHandler/cookieHandler";
   export let updateComponenent;
 
 	let usernameInput
@@ -46,7 +46,7 @@
           document.cookie = `${ACCESS_KEY}=`;
           return;
         }
-        document.cookie = `${ACCESS_KEY}=${token}`;
+        document.cookie = `${ACCESS_KEY}=${token}; SameSite=Strict`;
         // Go to the dashboard page
         window.location.href = "/dashboard";
     });
