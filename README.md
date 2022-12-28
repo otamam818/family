@@ -1,4 +1,4 @@
-**Note:** In progress - has not reached version 0.1 yet
+**Note:** Version 0.1 is ready. In the future I will add instructions to view it
 
 # My Family website
 A website I am making for my family to use to store their personal files wherever they go. Like a Google-Drive alternative, but with personalized features:
