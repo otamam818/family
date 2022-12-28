@@ -10,7 +10,16 @@
     currComponent = value;
   };
 
-  valid_session();
+  valid_session()
+    .then((session) => {
+      if (session.exists) {
+        window.location.href = "dashboard";
+      }
+    })
+    // The uncoming error says that the session is undefined, which happens
+    // whenever there is no reference token
+    .catch(_ => {});
+
 </script>
 
 <div class="login-page">

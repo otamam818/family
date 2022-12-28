@@ -37,12 +37,26 @@ export async function valid_session() {
         body: accessCookie,
         mode: 'cors'
       });
-      let session = await value.json()
-      console.log(session);
-      if (session.exists) {
-        window.location.href = "dashboard";
-      }
+      return await value.json()
     }
   }
 }
 
+/**
+ * Checks if the current session handled by the token is valid
+ */
+export async function get_user_data() {
+  // TODO: Check if a login cookie exists, and check-via the server
+  //       whether it is still valid
+  let accessCookie = getCookie(ACCESS_KEY);
+  let value = await fetch(new Request(`${currURI}/get-user-data`), {
+    method: 'POST',
+    headers: {
+      'Accept': 'text/plain; charset=utf-8',
+      'Content-Type': 'text/plain; charset=utf-8'
+    },
+    body: accessCookie,
+    mode: 'cors'
+  });
+  return await value.json()
+}
