@@ -68,3 +68,29 @@ pub struct CreateUser {
     pub place_of_birth: Option<String>,
 }
 
+/// Represents a family member's non-sensitive info
+#[derive(Debug, Serialize,Deserialize, Clone, Eq, Hash, PartialEq)]
+pub struct UserBasicData {
+    pub username: String,
+    pub first_name: String,
+    pub last_name: Option<String>,
+    pub birthday: Option<Date>,
+    pub gender: Gender,
+    pub place_of_birth: Option<String>,
+}
+
+impl UserBasicData {
+    #[allow(non_snake_case)]
+    pub fn from_User (user: &User) -> Self {
+        let clone = user.clone();
+        Self {
+            username: clone.username,
+            first_name: clone.first_name,
+            last_name: clone.last_name,
+            birthday: clone.birthday,
+            gender: clone.gender,
+            place_of_birth: clone.place_of_birth
+        }
+    }
+}
+

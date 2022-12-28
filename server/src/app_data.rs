@@ -1,12 +1,12 @@
 use std::{
     collections::HashMap,
-    hash::{Hash, Hasher}, io::Result,
+    hash::{Hash, Hasher},
     fs,
 };
 
 use serde::{Deserialize, Serialize};
 use jsonwebtoken::{encode, EncodingKey, Header};
-use crate::{user_info::{User, UserAuth}, user_session::UserSession};
+use crate::{user_info::{User, UserAuth, UserBasicData}, user_session::UserSession};
 
 // Constants
 const ENF_FE: &'static str
@@ -103,16 +103,35 @@ impl AppData {
         token
     }
 
-    pub fn session_exists(&self, token: String) -> bool {
-        match self.logged_in.get(&token) {
+    pub fn session_exists(&self, token: &String) -> bool {
+        match self.logged_in.get(token) {
             Some(value) => value.still_valid(),
             None => false
         }
     }
+
+    pub fn get_user_data(&mut self, token: &String) -> Result<UserBasicData, &str> {
+        if self.session_exists(token) {
+            let mut user_session = self.logged_in
+                .get(token)
+                .expect("The session exists")
+                .to_owned();
+
+            // Since the user is still using the session, it's
+            // best to revalidate it
+            user_session.revalidate();
+            return Ok(UserBasicData::from_User(
+                self.users
+                .get(&user_session.username)
+                .expect("The username is the key that the map uses")
+            ));
+        }
+        Err("Session not found")
+    }
 }
 
 /// Gets the children files and directories found in the string
-fn get_filepaths(path: &str) -> Result<Vec<String>> {
+fn get_filepaths(path: &str) -> std::io::Result<Vec<String>> {
     Ok(fs::read_dir(path)?
         .map(|f|
             f.expect("It exists, so it can be unwrapped")

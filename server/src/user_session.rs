@@ -26,5 +26,9 @@ impl UserSession {
             .as_secs();
         elapsed < THIRTY_MINUTES
     }
+
+    pub fn revalidate(&mut self) {
+        self.time = SystemTime::now()
+    }
 }
 

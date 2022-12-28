@@ -108,6 +108,29 @@ pub async fn check_valid_key(
     token: String,
 ) -> impl IntoResponse {
     let state = shared_state.write().unwrap();
-    (StatusCode::OK, Json(json!({"exists" : state.session_exists(token)})))
+    (StatusCode::OK, Json(json!({"exists" : state.session_exists(&token)})))
 }
 
+pub async fn get_user_data(
+    State(shared_state): State<Arc<RwLock<AppData>>>,
+    token: String,
+) -> impl IntoResponse {
+    let mut state = shared_state.write().unwrap();
+
+    let json_data;
+    match state.get_user_data(&token) {
+        Ok(user_data) => {
+            json_data = json!({
+                "exists" : true,
+                "user_data" : user_data
+            });
+        },
+        Err(reason) => {
+            println!("Error: {reason}");
+            json_data = json!({
+                "exists" : false,
+            });
+        }
+    };
+    (StatusCode::OK, Json(json_data))
+}

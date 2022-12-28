@@ -15,7 +15,7 @@ mod page_funcs;
 mod date;
 
 // Internal imports
-use crate::user_funcs::{create_user, login_user, check_valid_key};
+use crate::user_funcs::{create_user, login_user, check_valid_key, get_user_data};
 use crate::page_funcs::root;
 use crate::app_data::AppData;
 
@@ -33,6 +33,7 @@ async fn main() {
         .route("/", get(root))
         .route("/user", post(create_user))
         .route("/login", post(login_user))
+        .route("/get-user-data", post(get_user_data))
         .route("/session-check", post(check_valid_key))
         .with_state(Arc::clone(&app_state))
         .layer(CorsLayer::permissive());
