@@ -7,18 +7,32 @@ A website I am making for my family to use to store their personal files whereve
 
 ## Roadmap
 ### V0.1
-Make the full-stack
+Start working on the full-stack
 - [X] Make the database schema
-- [ ] Back-end
-  - [ ] Make the login function
-  - [ ] Make the data storage functions from `post` requests
-  - [ ] Make the file serving functions from `get` requests
-- [ ] Front-end
+- [X] Back-end
+  - [X] Make the login function
+  - [X] Store user metadata from `post` requests
+- [X] Front-end
   - [X] Make the Login page
   - [X] Make the add-new user page
   - [X] Authenticate the Login page with the backend to login
-  - [ ] Make a Home page
-  - [ ] Authenticate the home page to get requests for the specific user
+  - [X] Make a Home page
+  - [X] Authenticate the home page to get requests for the specific user
+
+### V0.5
+Append to the full-stack
+- [ ] Back-end
+  - [ ] Make the users' data storage functions from `post` requests
+  - [ ] Make the users' file serving functions from `get` requests
+- [ ] Front-end
+  - [ ] Make Google-drive-like Files and folders
+
+### V0.75
+Append to the full-stack
+- [ ] Back-end
+  - [ ] Implement data-storage for the family tree
+- [ ] Front-end
+  - [ ] Make the family tree design
 
 ### V1.0
 The full stack is made and my family can connect to it from any device with internet
