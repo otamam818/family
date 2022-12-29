@@ -8,9 +8,16 @@ use crate::{
     date::Date, app_data::AppData
 };
 
+// Constants
+const USR_PATH: &'static str = "data/info";
+const DIR_PATH: &'static str = "data/dirs";
 
 /// Creates a new user from the CreateUser data
-pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse {
+#[axum_macros::debug_handler]
+pub async fn create_user(
+    State(shared_state): State<Arc<RwLock<AppData>>>,
+    Json(payload): Json<CreateUser>,
+) -> impl IntoResponse {
     const PATH_SECRET_FILE: &'static str = "data/secret_code.txt";
 
     // The assumption is that this is run from the "server" folder
@@ -48,7 +55,13 @@ pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse 
     match make_user_file(&user) {
         Ok(_) => {
             // TODO: Add the user to the `AppState.users` HashMap
-            (StatusCode::CREATED, Ok(Json(user)))
+            let mut state = shared_state.write().unwrap();
+            state.append_user(user.clone());
+            let user_auth = UserAuth {
+                username: user.username.to_string(),
+                password: user.password.to_string()
+            };
+            (StatusCode::CREATED, Ok(state.generate_token(&user_auth)))
         },
         Err(message) => (
             StatusCode::BAD_REQUEST,
@@ -60,8 +73,12 @@ pub async fn create_user(Json(payload): Json<CreateUser>,) -> impl IntoResponse 
 /// Adds a user to the data/users folder as a separate JSON file
 fn make_user_file(user: &User) -> std::io::Result<()> {
     let data = serde_json::to_string(&user);
-    let file_path = format!("data/users/{}.json", user.username);
+    let file_path = format!("{}/{}.json", USR_PATH, user.username);
     fs::write(file_path, data?)?;
+
+    // Make a folder with the user's username
+    let file_path = format!("{}/{}", DIR_PATH, user.username);
+    fs::create_dir(file_path)?;
     Ok(())
 }
 

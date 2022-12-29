@@ -34,7 +34,7 @@ impl Hash for AppData {
 }
 
 // Assumed to run from the root server folder
-const USER_DIR: &'static str = "./data/users";
+const USER_DIR: &'static str = "./data/info";
 
 impl AppData {
     /// Loads the previously-recorded data, stored in the local system of the
@@ -95,10 +95,13 @@ impl AppData {
             .expect(USR_FOUND)
             .username.clone()
         );
+
         self.logged_in
             .entry(token.clone())
             .and_modify(|key| *key = new_user_session.clone())
             .or_insert(new_user_session);
+
+        println!("in app_data/generate_token():\n{:?}", &self);
 
         token
     }
@@ -127,6 +130,10 @@ impl AppData {
             ));
         }
         Err("Session not found")
+    }
+
+    pub fn append_user(&mut self, user: User) {
+        self.users.insert(user.username.clone(), user);
     }
 }
 
