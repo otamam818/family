@@ -6,7 +6,7 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 use jsonwebtoken::{encode, EncodingKey, Header};
-use crate::{user_info::{User, UserAuth, UserBasicData}, user_session::UserSession};
+use crate::user::*;
 
 // Constants
 const ENF_FE: &'static str

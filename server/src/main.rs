@@ -8,14 +8,12 @@ use std::{net::SocketAddr, sync::{Arc, RwLock}};
 
 // Modules used
 mod app_data;
-mod user_info;
-mod user_funcs;
-mod user_session;
+mod user;
 mod page_funcs;
 mod date;
 
 // Internal imports
-use crate::user_funcs::{create_user, login_user, check_valid_key, get_user_data};
+use crate::user::*;
 use crate::page_funcs::root;
 use crate::app_data::AppData;
 

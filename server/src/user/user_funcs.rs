@@ -4,7 +4,7 @@ use axum::{response::IntoResponse, Json, http::StatusCode, extract::State};
 use serde_json::json;
 
 use crate::{
-    user_info::{CreateUser, User, UserAuth},
+    user::{CreateUser, User, UserAuth},
     date::Date, app_data::AppData
 };
 
