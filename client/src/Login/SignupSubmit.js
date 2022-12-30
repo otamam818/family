@@ -26,7 +26,7 @@ export function handleSubmit() {
   let first_name = elements[2];
   let last_name = elements[3];
 
-  postPromise("user", {
+  return postPromise("user", {
     username: elements[0],
     password: elements[1],
     secret_code: elements[6],
@@ -37,15 +37,10 @@ export function handleSubmit() {
     place_of_birth: elements[5],
   })
     .then((value) => {
-     if (value.ok) {
-       /* TODO: Implement re-routing so that the new user is logged in after
-                signing up */
-       return value.json();
-     }
-     return value.text();
+      return value.text();
     })
     .then((value) => {
-      console.log(`Submitted: \n${value}`);
+      return value;
     })
     .catch((reason) => {
       console.error(reason);

@@ -2,6 +2,7 @@
   import Form from "./Form.svelte";
   import {formClass} from "./formHandler";
   import {handleSubmit} from "./SignupSubmit";
+  import {ACCESS_KEY} from "../dataHandler/cookieHandler";
   export let updateComponenent;
 
 </script>
@@ -61,5 +62,14 @@
       }, 400);
     }}
   > Back </span>
-  <button on:click|preventDefault={handleSubmit}> Submit </button>
+  <button on:click|preventDefault={() => {
+          handleSubmit()
+            .then((value) => {
+              console.log(value, typeof(value));
+              document.cookie = `${ACCESS_KEY}=${value}; SameSite=Strict`;
+              // Go to the dashboard page
+              window.location.href = "/dashboard";
+            })
+          }}
+  > Submit </button>
 </Form>
