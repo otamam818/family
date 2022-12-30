@@ -1,0 +1,37 @@
+.side-bar {
+  background-color: hsla(0, 0%, 3.1%, 0.33);
+  padding: 9px 16px;
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0 8px 16px #000000e3;
+  border: 1px solid hsl(0deg, 0%, 10%);
+  line-height: 1.7;
+  position: fixed;
+  left: 35px;
+  top: 96px;
+  height: 60%;
+  justify-content: space-evenly;
+  display: flex;
+  flex-direction: column;
+  transition: 300ms;
+  backdrop-filter: blur(3px);
+
+  &:hover {
+      background-color: hsla(0deg, 0%, 0%, 0.2);
+      box-shadow: 0 20px 24px rgba(0, 0, 0, 0.8901960784);
+      backdrop-filter: blur(30px);
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  em {
+    color: hsl(0, 0%, 69%);
+  }
+
+  li {
+    list-style: none;
+  }
+}
+
